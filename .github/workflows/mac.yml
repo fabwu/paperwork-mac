@@ -22,20 +22,20 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
       - name: Cache gtk-osx
+        id: cache-gtk-osx
         uses: actions/cache@v3
         with:
           path: |
             ~/gtk-osx-root
             ~/.config
           key: gtk-osx
-      - if: ${{ steps.cache-npm.outputs.cache-hit != 'true' }}
+      - if: ${{ steps.cache-gtk-osx.outputs.cache-hit != 'true' }}
         name: Install gtk-osx
         run: |
           wget https://gitlab.gnome.org/GNOME/gtk-osx/-/raw/master/gtk-osx-setup.sh
           chmod +x gtk-osx-setup.sh
           export DEVROOT=~/gtk-osx-root
           ./gtk-osx-setup.sh
-          ls -lah
-          ./gtk-osx-root/.new_local/bin/jhbuild bootstrap-gtk-osx
-          ./gtk-osx-root/.new_local/bin/jhbuild build meta-gtk-osx-bootstrap meta-gtk-osx-gtk3
+          ~/gtk-osx-root/.new_local/bin/jhbuild bootstrap-gtk-osx
+          ~/gtk-osx-root/.new_local/bin/jhbuild build meta-gtk-osx-bootstrap meta-gtk-osx-gtk3
         
