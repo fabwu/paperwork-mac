@@ -29,13 +29,16 @@ jobs:
             ~/gtk-osx-root
             ~/.config
           key: gtk-osx
-      - if: ${{ steps.cache-gtk-osx.outputs.cache-hit != 'true' }}
-        name: Install gtk-osx
+          #- if: ${{ steps.cache-gtk-osx.outputs.cache-hit != 'true' }}
+      - name: Install gtk-osx
         run: |
           wget https://gitlab.gnome.org/GNOME/gtk-osx/-/raw/master/gtk-osx-setup.sh
           chmod +x gtk-osx-setup.sh
+          export PATH=/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin
           export DEVROOT=~/gtk-osx-root
+          env
           ./gtk-osx-setup.sh
+          cp "$GITHUB_WORKSPACE/jhbuildrc-custom" ~/.config/jhbuildrc-custom
           ~/gtk-osx-root/.new_local/bin/jhbuild bootstrap-gtk-osx
           ~/gtk-osx-root/.new_local/bin/jhbuild build meta-gtk-osx-bootstrap meta-gtk-osx-gtk3
         
